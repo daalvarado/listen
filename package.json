@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "moment": "^2.20.1",
-    "momentjs": "^2.0.0"
+    "momentjs": "^2.0.0",
+    "reset-css": "^2.2.1"
   }
 }

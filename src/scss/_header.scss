@@ -1,0 +1,10 @@
+.web-header {
+    background: transparentize(white, 0.1);
+    text-align: center;
+    padding: 20px 0;
+    box-shadow: 0 0px 5px lighten($color: black, $amount: 30%);
+    .web-title{
+        color: $color-cheery-pink;
+        text-shadow: 0 1px 1px lighten($color: black, $amount: 30%);
+    }
+}
