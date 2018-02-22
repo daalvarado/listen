@@ -28,4 +28,16 @@ $color-grandmas-pillow: #C44D58;
 //Main components colors
 $main-text-color: $color-mighty-slate;
 $links-color: $color-grandmas-pillow;
-$links-hover-color: $color-cheery-pink
+$links-hover-color: $color-cheery-pink;
+$shadow-color: lighten(black, 30%);
+$brand-color: $color-cheery-pink;
+
+//Transitions
+$default-transition-time: 0.25s;
+
+//Responsive breakpoints
+$small-device-width: 376px;
+$medium-device-width: 576px;
+$large-device-width: 750px;
+$xl-device-width: 900px;
+

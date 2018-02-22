@@ -1,0 +1,19 @@
+@mixin if-is-small-device {
+     @media (min-width: $small-device-width) {
+            @content;  
+}}
+
+@mixin if-is-medium-device {
+     @media (min-width: $medium-device-width) {
+            @content;  
+}}
+
+@mixin if-is-large-device {
+     @media (min-width: $large-device-width) {
+            @content;  
+}}
+
+@mixin if-is-xl-device {
+     @media (min-width: $xl-device-width) {
+            @content;  
+}}
