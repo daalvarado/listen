@@ -1,60 +1,89 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const isProduction = process.env.ENTORNO == "produccion";
+let scssLoaders = [];
+if (isProduction) {
+    scssLoaders = ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: [
+            "css-loader?url=false&sourceMap=true",
+            "sass-loader?sourceMap=true"
+          ]
+        })
+} else {
+    scssLoaders = ["style-loader", "css-loader?url=false&sourceMap=true", "sass-loader?sourceMap=true"];
+}
 
 module.exports = {
+  //entry point: archivo que lee webpack para construir el grafo de dependencias
+  entry: "./src/entry.js", //tb se puede poner path.join(__dirname, 'src','entry.js'),
+  //output: carpeta en la que quiero que webpack me deje el codigo generado
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist")
+  },
 
-    //entry point: archivo que lee webpack para construir el grafo de dependencias
-    entry: './src/entry.js', //tb se puede poner path.join(__dirname, 'src','entry.js'),
-    //output: carpeta en la que quiero que webpack me deje el codigo generado
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
-    },
-
-    //module loaders
-    module: {
-        rules: [
-            {
-                test: /\.scss$/,
-                use: ['style-loader', 'css-loader?url=false', 'sass-loader']
-            }, {
-                test: /\.js$/,
-                use: 'babel-loader',
-                exclude: path.join(__dirname, 'node_modules')
-            },{
-                test: /assets.[^img]/,
-                use: 'file-loader?name=[name].[ext]&useRelativePath=true'
-            },{
-                test: /\.(jpe?g|png|gif|svg)$/,
-                use: [
-                    'file-loader?name=[name].[ext]&useRelativePath=true',
-                    'image-webpack-loader'
-                ]
-            }
+  //module loaders
+  module: {
+    rules: [
+      {
+        test: /\.scss$/,
+        use: scssLoaders
+        // use: ['style-loader', 'css-loader?url=false&sourceMap=true', 'sass-loader?sourceMap=true']
+      },
+      {
+        test: /\.js$/,
+        use: "babel-loader",
+        exclude: path.join(__dirname, "node_modules")
+      },
+      {
+        test: /assets.[^img]/,
+        use: "file-loader?name=[name].[ext]&useRelativePath=true"
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/,
+        use: [
+          "file-loader?name=[name].[ext]&useRelativePath=true",
+          "image-webpack-loader"
         ]
-    },
+      },
+      {
+          test: /\.(html|ejs)$/,
+          use: ['html-loader', 'ejs-html-loader']
+      }
+    ]
+  },
 
-    //plugins que estamos utilizando
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: './src/index.html', // path.join(__dirname, 'src','index.html'),
-            minify: {
-                collapseWhitespace: true
-            }
-        }),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NamedModulesPlugin()
-    ],
+  //plugins que estamos utilizando
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
+    new HtmlWebpackPlugin({
+      template: "./src/index.html", // path.join(__dirname, 'src','index.html'),
+      minify: {
+        collapseWhitespace: true
+      }
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'contact.html',  
+      template: path.join(__dirname, 'src','contact.html'),
+      minify: {
+        collapseWhitespace: true
+      }
+    }),
+    new ExtractTextPlugin("style.css")
+  ],
 
-    //dev server configuration
-    devServer: {
-        open: true, //abre el navegador por defecto
-        port: 3000, // puerto del servidor web
-        overlay: true, // muestra los errores en pantalla
-        hot: true,
-        contentBase: path.join(__dirname, 'src'),
-        watchContentBase: true
-    }
-
+  //dev server configuration
+  devServer: {
+    open: true, //abre el navegador por defecto
+    port: 3000, // puerto del servidor web
+    overlay: true, // muestra los errores en pantalla
+    hot: true,
+    contentBase: path.join(__dirname, "src"),
+    watchContentBase: true
+  }
 };
